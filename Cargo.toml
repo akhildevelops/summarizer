@@ -1,0 +1,13 @@
+
+[workspace]
+members = ["youtube-transcript"]
+resolver = "2"
+
+[workspace.package]
+edition = "2021"
+version = "0.1.0"
+
+[workspace.dependencies]
+tokio = { version = "~1.27", features = ["macros"] }
+serde_json = { version = "~1.0" }
+serde = { version = "~1.0", features = ["derive"] }
