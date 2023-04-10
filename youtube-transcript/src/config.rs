@@ -6,7 +6,7 @@ impl Default for HTMLParserConfig {
     fn default() -> Self {
         Self {
             from: "playerCaptionsTracklistRenderer\":",
-            to: " }, \"videoDetails\"",
+            to: "},\"videoDetails\"",
         }
     }
 }
