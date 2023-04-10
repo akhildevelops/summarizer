@@ -3,19 +3,19 @@ use crate::parser::{HTMLParser, TranscriptParser};
 use reqwest::Client;
 use roxmltree::Document;
 use std::error::Error;
-struct Youtube<'a, 'b> {
+pub struct Youtube<'a, 'b> {
     link: &'a str,
     config: &'b Config,
 }
 
 impl<'a, 'b> Youtube<'a, 'b> {
-    fn link(link: &'a str, config: &'b Config) -> Self {
+    pub fn link(link: &'a str, config: &'b Config) -> Self {
         Self { link, config }
     }
 }
 
 impl<'a, 'b> Youtube<'a, 'b> {
-    async fn get_transcript(&self) -> Result<String, Box<dyn Error>> {
+    pub async fn get_transcript(&self) -> Result<String, Box<dyn Error>> {
         let client = Client::default();
         let response = client.get(self.link).send().await?;
         let c = response

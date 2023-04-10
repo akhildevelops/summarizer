@@ -1,5 +1,5 @@
 use crate::error;
-use roxmltree::{Document, NodeId};
+use roxmltree::Document;
 use serde;
 use serde::Deserialize;
 use serde_json;
@@ -13,7 +13,8 @@ pub(crate) struct Caption {
 
 #[derive(Deserialize)]
 struct Captions {
-    captionTracks: Vec<Caption>,
+    #[serde(rename(deserialize = "captionTracks"))]
+    caption_tracks: Vec<Caption>,
 }
 
 pub(crate) trait HTMLParser<'a> {
@@ -32,7 +33,7 @@ pub(crate) trait HTMLParser<'a> {
         let value: Captions = serde_json::from_str(actual_json)
             .map_err(|x| error::Error::ParseError(format!("{}", x)))?;
         let caption = value
-            .captionTracks
+            .caption_tracks
             .into_iter()
             .filter(|x| x.lang_code == "en")
             .next()
@@ -49,8 +50,6 @@ impl<'a> HTMLParser<'a> for String {
 
 pub(crate) struct TranscriptCore<'a> {
     text: &'a str,
-    start: &'a str,
-    duration: &'a str,
 }
 
 pub(crate) struct Transcript<'a> {
@@ -74,12 +73,6 @@ impl TranscriptParser {
             .descendants()
             .filter(|x| x.tag_name() == "text".into());
         for node in nodes {
-            let start = node
-                .attribute("start")
-                .ok_or(error::Error::ParseError("transcript parse error".into()))?;
-            let end = node
-                .attribute("dur")
-                .ok_or(error::Error::ParseError("transcriptparse error".into()))?;
             let node = node
                 .last_child()
                 .ok_or(error::Error::ParseError("transcript parse error".into()))?;
@@ -87,11 +80,7 @@ impl TranscriptParser {
                 .text()
                 .ok_or(error::Error::ParseError("transcript error".into()))?;
 
-            transcripts.push(TranscriptCore {
-                text,
-                start,
-                duration: end,
-            })
+            transcripts.push(TranscriptCore { text })
         }
         Ok(Transcript { transcripts })
     }

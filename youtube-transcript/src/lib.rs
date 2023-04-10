@@ -3,3 +3,4 @@ mod error;
 mod parser;
 mod youtube;
 pub use config::Config;
+pub use youtube::Youtube;
