@@ -1,3 +1,7 @@
+#![warn(missing_docs)]
+//! Asynchronous Youtube Transcript library
+//! Examples:
+//!
 mod config;
 mod error;
 mod parser;
