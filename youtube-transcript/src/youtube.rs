@@ -35,6 +35,7 @@ mod test {
     use super::*;
     use crate::Config;
     #[tokio::test]
+    #[ignore = "Requires mocking youtube response"]
     async fn test_u_trans() {
         let config = Config::default();
         let u = Youtube::link("https://www.youtube.com/watch?v=GJLlxj_dtq8", &config);

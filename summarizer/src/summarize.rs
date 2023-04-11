@@ -47,6 +47,7 @@ mod test {
         }
     }
     #[tokio::test]
+    #[ignore = "Requires mocking openai response"]
     async fn summarize() {
         let resp = Summarizer::summarize(&DUMMY).await.unwrap();
         println!("{resp}")

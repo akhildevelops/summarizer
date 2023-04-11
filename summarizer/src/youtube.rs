@@ -30,8 +30,8 @@ impl Summarize for YoutubeContent {
 #[cfg(test)]
 mod test {
     use super::*;
-
     #[tokio::test]
+    #[ignore = "Requires mocking youtube response"]
     async fn test_content() {
         let content = Youtube::link("https://www.youtube.com/watch?v=GJLlxj_dtq8")
             .content()
