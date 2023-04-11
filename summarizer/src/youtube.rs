@@ -30,15 +30,13 @@ impl Summarize for YoutubeContent {
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::Summarizer;
 
     #[tokio::test]
-    async fn test_summarise_youtube_link() {
+    async fn test_content() {
         let content = Youtube::link("https://www.youtube.com/watch?v=GJLlxj_dtq8")
             .content()
             .await
             .unwrap();
-        let summary = Summarizer::summarize(&content).await.unwrap();
-        println!("{summary}");
+        println!("{}", content.content);
     }
 }

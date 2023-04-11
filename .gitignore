@@ -5,3 +5,6 @@ scrap/
 
 #Env
 .env
+
+#Editor
+.vscode/
