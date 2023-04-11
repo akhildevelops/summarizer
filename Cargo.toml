@@ -1,6 +1,6 @@
 
 [workspace]
-members = ["youtube-transcript"]
+members = ["youtube-transcript", "summarizer"]
 resolver = "2"
 
 [workspace.package]
@@ -8,8 +8,9 @@ edition = "2021"
 version = "0.1.0"
 
 [workspace.dependencies]
+async-openai = { version = "~0.10" }
 tokio = { version = "~1.27", features = ["macros"] }
 serde_json = { version = "~1.0" }
 serde = { version = "~1.0", features = ["derive"] }
 roxmltree = { version = "~0.18" }
-reqwest = { version = "0.11.16" }
+reqwest = { version = "~0.11" }

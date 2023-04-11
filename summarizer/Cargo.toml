@@ -1,0 +1,11 @@
+[package]
+name = "summarizer"
+version.workspace = true
+edition.workspace = true
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+async-openai = { workspace = true }
+youtube-transcript = { path = "../youtube-transcript" }
+tokio = { workspace = true, features = ["rt-multi-thread"] }

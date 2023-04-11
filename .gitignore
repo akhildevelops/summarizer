@@ -2,3 +2,6 @@ target/
 
 # Skip scrap
 scrap/
+
+#Env
+.env
