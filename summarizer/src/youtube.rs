@@ -1,15 +1,15 @@
 use std::error::Error;
 
-use crate::Summarize;
+use crate::summarize::Summarize;
 use youtube_transcript::{Config, Youtube as Yt};
-struct Youtube<'a> {
+pub struct Youtube<'a> {
     link: &'a str,
 }
 impl<'a> Youtube<'a> {
-    fn link(link: &'a str) -> Self {
+    pub fn link(link: &'a str) -> Self {
         Self { link }
     }
-    async fn content(&self) -> Result<YoutubeContent, Box<dyn Error>> {
+    pub async fn content(&self) -> Result<YoutubeContent, Box<dyn Error>> {
         let c = Config::default();
         let transcript = Yt::link(self.link, &c).get_transcript().await?;
         Ok(YoutubeContent {
@@ -17,7 +17,7 @@ impl<'a> Youtube<'a> {
         })
     }
 }
-struct YoutubeContent {
+pub struct YoutubeContent {
     content: String,
 }
 
@@ -30,14 +30,15 @@ impl Summarize for YoutubeContent {
 #[cfg(test)]
 mod test {
     use super::*;
+    use crate::Summarizer;
 
     #[tokio::test]
     async fn test_summarise_youtube_link() {
-        Youtube::link("https://www.youtube.com/watch?v=GJLlxj_dtq8")
+        let content = Youtube::link("https://www.youtube.com/watch?v=GJLlxj_dtq8")
             .content()
             .await
-            .unwrap()
-            .summarize()
             .unwrap();
+        let summary = Summarizer::summarize(&content).await.unwrap();
+        println!("{summary}");
     }
 }

@@ -4,13 +4,16 @@ use async_openai::{
     Client,
 };
 use std::error::Error;
-use tokio::runtime::Runtime;
-pub(crate) trait Summarize {
-    fn description(&self) -> &str;
 
-    fn summarize(&self) -> Result<String, Box<dyn Error>> {
+pub trait Summarize {
+    fn description(&self) -> &str;
+}
+
+pub struct Summarizer;
+
+impl Summarizer {
+    pub async fn summarize(x: &impl Summarize) -> Result<String, Box<dyn Error>> {
         let client = Client::new();
-        println!("{}", std::env::var("OPENAI_API_KEY")?);
         let request = CreateChatCompletionRequestArgs::default()
             .model(default::GPT_MODEL)
             .messages([
@@ -20,12 +23,12 @@ pub(crate) trait Summarize {
                     .build()?,
                 ChatCompletionRequestMessageArgs::default()
                     .role(Role::User)
-                    .content(self.description())
+                    .content(x.description())
                     .build()?,
             ])
             .build()?;
-        let runtime = Runtime::new()?;
-        let response = runtime.block_on(client.chat().create(request))?;
+        let response = client.chat().create(request).await?;
+
         Ok(format!("{:?}", response))
     }
 }
@@ -43,9 +46,9 @@ mod test {
             Once the runtime has been dropped, any outstanding I/O resources bound to it will no longer function. Calling any method on them will result in an error."
         }
     }
-    #[test]
-    fn summarize() {
-        let op = DUMMY.summarize().unwrap();
-        println!("{op}")
+    #[tokio::test]
+    async fn summarize() {
+        let resp = Summarizer::summarize(&DUMMY).await.unwrap();
+        println!("{resp}")
     }
 }

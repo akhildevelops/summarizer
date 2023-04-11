@@ -2,4 +2,5 @@ mod default;
 mod summarize;
 mod youtube;
 
-use summarize::Summarize;
+pub use summarize::Summarizer;
+pub use youtube::Youtube;
