@@ -9,7 +9,7 @@ version = "0.1.0"
 
 [workspace.dependencies]
 async-openai = { version = "~0.10" }
-tokio = { version = "~1.27", features = ["macros"] }
+tokio = { version = "~1.27", features = ["macros", "rt-multi-thread"] }
 serde_json = { version = "~1.0" }
 serde = { version = "~1.0", features = ["derive"] }
 roxmltree = { version = "~0.18" }

@@ -1,11 +1,7 @@
-use std::error::Error;
-
 use clap::{
     builder::{self, IntoResettable},
     Arg, Command,
 };
-use reqwest::multipart::Form;
-use serde_json::value;
 use youtube_transcript::{Config, Youtube};
 
 #[derive(Clone)]
