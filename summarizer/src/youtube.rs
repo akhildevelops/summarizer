@@ -13,7 +13,7 @@ impl<'a> Youtube<'a> {
         let c = Config::default();
         let transcript = Yt::link(self.link, &c).get_transcript().await?;
         Ok(YoutubeContent {
-            content: transcript.describe(),
+            content: transcript.into(),
         })
     }
 }

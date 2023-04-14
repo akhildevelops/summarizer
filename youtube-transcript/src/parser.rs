@@ -1,4 +1,5 @@
 use crate::error;
+use crate::utils::to_human_readable;
 use roxmltree::Document;
 use serde;
 use serde::Deserialize;
@@ -70,12 +71,22 @@ impl IntoIterator for Transcript {
     }
 }
 
-impl Transcript {
-    pub fn describe(&self) -> String {
-        self.transcripts
-            .iter()
-            .map(|x| x.text.clone())
-            .collect::<String>()
+impl From<Transcript> for String {
+    fn from(value: Transcript) -> Self {
+        {
+            value
+                .transcripts
+                .into_iter()
+                .map(|x| {
+                    let start_h = to_human_readable(&x.start);
+                    let dur_h = to_human_readable(&x.duration);
+                    format!(
+                        "\nstart at: {} for duration {}\n{}\n==========\n\n",
+                        start_h, dur_h, x.text
+                    )
+                })
+                .collect::<String>()
+        }
     }
 }
 

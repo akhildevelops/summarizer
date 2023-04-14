@@ -11,3 +11,4 @@ serde_json = { workspace = true }
 serde = { workspace = true }
 roxmltree = { workspace = true }
 reqwest = { workspace = true }
+clap = { workspace = true, fetures = ["string"] }
