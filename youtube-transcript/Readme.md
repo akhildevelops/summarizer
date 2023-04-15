@@ -4,18 +4,36 @@ Retrieve transcript of any youtube video.
 ## Install
 `cargo install youtube-transcript`
 
-## Usage
+## Usage:
 
-### Commandline
-youtube-transcript https://www.youtube.com/watch?v=GJLlxj_dtq8
 
-### Library
-youtube-transcript is an async library and below is the example:
-``` rust
+### as Commandline
+``` bash
+youtube-transcript https://www.youtube.com/watch?v=RcYjXbSJBN8
 
+start at: 639ms for duration 2s
+welcome back
+==========
+
+
+start at: 2s for duration 4s
+here we go again great to see you and
+==========
+...
+...
 ```
 
+### as Library
+youtube-transcript is an async library and below is the example to use in an applicatio:
+``` rust
+let link:&str="https://www.youtube.com/watch?v=RcYjXbSJBN8";
 
+# Create a youtube instance from builder.
+let youtube_loader:Youtube = YoutubeBuilder::default().build();
+
+# Get the transcript by loading youtube url.
+let transcript:Transcript=youtube_loader.transcript(link).await?;
+```
 
 
 ### Other tools
