@@ -15,3 +15,7 @@ serde = { workspace = true }
 roxmltree = { workspace = true }
 reqwest = { workspace = true }
 clap = { workspace = true }
+once_cell = { workspace = true }
+
+[lib]
+doctest = false

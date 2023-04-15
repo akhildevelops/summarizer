@@ -1,3 +1,4 @@
+use once_cell::sync::Lazy;
 pub struct HTMLParserConfig {
     pub from: &'static str,
     pub to: &'static str,
@@ -20,3 +21,4 @@ impl Default for Config {
         }
     }
 }
+pub static CONFIG_VAL: Lazy<Config> = Lazy::new(|| Config::default());

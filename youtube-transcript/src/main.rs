@@ -2,12 +2,12 @@ use clap::{
     builder::{self, IntoResettable},
     Arg, Command,
 };
-use youtube_transcript::{Config, Youtube};
+use youtube_transcript::YoutubeBuilder;
 
 #[derive(Clone)]
 enum Format {
-    json,
-    text,
+    Json,
+    Text,
 }
 impl IntoResettable<builder::OsStr> for Format {
     fn into_resettable(self) -> builder::Resettable<builder::OsStr> {
@@ -19,8 +19,8 @@ impl IntoResettable<builder::OsStr> for Format {
 impl ToString for Format {
     fn to_string(&self) -> String {
         match self {
-            Format::json => "json".to_string(),
-            Format::text => "text".to_string(),
+            Format::Json => "json".to_string(),
+            Format::Text => "text".to_string(),
         }
     }
 }
@@ -28,8 +28,8 @@ impl TryFrom<&str> for Format {
     type Error = String;
     fn try_from(value: &str) -> Result<Self, Self::Error> {
         match value {
-            "json" => Ok(Format::json),
-            "text" => Ok(Format::text),
+            "json" => Ok(Format::Json),
+            "text" => Ok(Format::Text),
             _ => Err(format!(
                 "Cannot find json / text as format definition. Recieved {}",
                 value
@@ -44,22 +44,25 @@ fn format_parser(arg: &str) -> Result<Format, String> {
 
 #[tokio::main]
 async fn main() {
-    let config = Config::default();
     let app = Command::new("yts")
         .arg(
             Arg::new("format")
                 .help("ouput format")
                 .long("format")
                 .value_parser(builder::ValueParser::new(format_parser))
-                .default_value(Format::text),
+                .default_value(Format::Text),
         )
         .arg(Arg::new("link").help("Youtube-link"))
         .get_matches();
-    let format = app.get_one::<Format>("format").unwrap_or(&Format::json);
+    // let format = app.get_one::<Format>("format").unwrap_or(&Format::Json);
     let link = app
         .get_one::<String>("link")
         .expect("Youtube Link not provided");
-    let transcript = Youtube::link(link, &config).get_transcript().await.unwrap();
+    let transcript = YoutubeBuilder::default()
+        .build()
+        .transcript(link)
+        .await
+        .unwrap();
 
     println!("{}", String::from(transcript));
 }

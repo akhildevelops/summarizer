@@ -1,7 +1,7 @@
 use std::error::Error;
 
 use crate::summarize::Summarize;
-use youtube_transcript::{Config, Youtube as Yt};
+use youtube_transcript::YoutubeBuilder;
 pub struct Youtube<'a> {
     link: &'a str,
 }
@@ -10,8 +10,10 @@ impl<'a> Youtube<'a> {
         Self { link }
     }
     pub async fn content(&self) -> Result<YoutubeContent, Box<dyn Error>> {
-        let c = Config::default();
-        let transcript = Yt::link(self.link, &c).get_transcript().await?;
+        let transcript = YoutubeBuilder::default()
+            .build()
+            .transcript(self.link)
+            .await?;
         Ok(YoutubeContent {
             content: transcript.into(),
         })
