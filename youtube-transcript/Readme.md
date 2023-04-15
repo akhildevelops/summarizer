@@ -1,6 +1,8 @@
 # Youtube Transcript
 Retrieve transcript of any youtube video.
 
+### [Documentation](https://docs.rs/youtube-transcript)
+
 ## Install
 `cargo install youtube-transcript`
 
