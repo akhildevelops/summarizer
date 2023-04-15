@@ -2,6 +2,7 @@ use clap::{
     builder::{self, IntoResettable},
     Arg, Command,
 };
+use serde_json;
 use youtube_transcript::YoutubeBuilder;
 
 #[derive(Clone)]
@@ -54,7 +55,7 @@ async fn main() {
         )
         .arg(Arg::new("link").help("Youtube-link"))
         .get_matches();
-    // let format = app.get_one::<Format>("format").unwrap_or(&Format::Json);
+    let format = app.get_one::<Format>("format").unwrap_or(&Format::Json);
     let link = app
         .get_one::<String>("link")
         .expect("Youtube Link not provided");
@@ -64,5 +65,9 @@ async fn main() {
         .await
         .unwrap();
 
-    println!("{}", String::from(transcript));
+    let data = match format {
+        Format::Json => serde_json::to_string(&transcript).unwrap(),
+        Format::Text => String::from(transcript),
+    };
+    println!("{}", data);
 }

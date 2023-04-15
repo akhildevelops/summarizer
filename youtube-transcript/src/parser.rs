@@ -3,6 +3,7 @@ use crate::utils::to_human_readable;
 use roxmltree::Document;
 use serde;
 use serde::Deserialize;
+use serde::Serialize;
 use serde_json;
 use std::error::Error;
 use std::time::Duration;
@@ -52,7 +53,7 @@ impl<'a> HTMLParser<'a> for String {
 }
 
 /// Struct that contains data about transcirpt text along with start and duration in the whole video.
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Serialize)]
 pub struct TranscriptCore {
     /// transcript text. Ex: "Hi How are you"
     pub text: String,
@@ -63,6 +64,7 @@ pub struct TranscriptCore {
 }
 
 /// Struct containing youtube's transcript data as a Vec<[`TranscriptCore`]>
+#[derive(Serialize)]
 pub struct Transcript {
     /// List of transcript texts in [`TranscriptCore`] format
     pub transcripts: Vec<TranscriptCore>,
