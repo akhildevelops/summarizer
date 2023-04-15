@@ -10,6 +10,9 @@ Retrieve transcript of any youtube video.
 
 
 ### as Commandline
+
+renders transcript in text format / json format. By default it's text.
+
 ``` bash
 youtube-transcript https://www.youtube.com/watch?v=RcYjXbSJBN8
 
@@ -21,6 +24,42 @@ welcome back
 start at: 2s for duration 4s
 here we go again great to see you and
 ==========
+...
+...
+```
+
+For json
+``` bash
+youtube-transcript --format json https://www.youtube.com/watch?v=RcYjXbSJBN8
+
+{
+  "transcripts": [
+    {
+      "text": "Hey, how&#39;s it going Dave 2d here?",
+      "start": {
+        "secs": 0,
+        "nanos": 0
+      },
+      "duration": {
+        "secs": 1,
+        "nanos": 539999962
+      }
+    },
+    {
+      "text": "This is a Microsoft Surface go and when they first announced it I was interested in it",
+      "start": {
+        "secs": 1,
+        "nanos": 539999962
+      },
+      "duration": {
+        "secs": 4,
+        "nanos": 159999847
+      }
+    }
+    ...
+    ...
+  ]
+}
 ...
 ...
 ```
