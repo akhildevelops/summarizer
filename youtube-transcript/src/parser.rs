@@ -51,15 +51,21 @@ impl<'a> HTMLParser<'a> for String {
     }
 }
 
+/// Struct that contains data about transcirpt text along with start and duration in the whole video.
 #[derive(PartialEq, Debug)]
 pub struct TranscriptCore {
-    text: String,
-    start: Duration,
-    duration: Duration,
+    /// transcript text. Ex: "Hi How are you"
+    pub text: String,
+    /// starting time of the text in the whole video. Ex: "0 sec"
+    pub start: Duration,
+    /// duration of the text Ex: "0.8 sec"
+    pub duration: Duration,
 }
 
+/// Struct containing youtube's transcript data as a Vec<[`TranscriptCore`]>
 pub struct Transcript {
-    transcripts: Vec<TranscriptCore>,
+    /// List of transcript texts in [`TranscriptCore`] format
+    pub transcripts: Vec<TranscriptCore>,
 }
 
 impl IntoIterator for Transcript {

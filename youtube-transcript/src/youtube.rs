@@ -4,11 +4,13 @@ use reqwest::Client;
 use roxmltree::Document;
 use std::error::Error;
 
+/// Youtube container that holds the [`Config`].
 pub struct Youtube<'b> {
     config: &'b Config,
 }
 
 impl<'b> Youtube<'b> {
+    /// extracts [`Transcript`] from the video link provided.
     pub async fn transcript<'a>(&self, url: &'a str) -> Result<Transcript, Box<dyn Error>> {
         let client = Client::default();
         let response = client.get(url).send().await?;
@@ -24,17 +26,20 @@ impl<'b> Youtube<'b> {
     }
 }
 
+/// Builder struct for building [`Youtube`]
 pub struct YoutubeBuilder<'b> {
     config: &'b Config,
 }
 
 impl<'b> YoutubeBuilder<'b> {
+    /// creates [`YoutubeBuilder`] with default [`Config`] values.
     pub fn default() -> Self {
         Self {
             config: &CONFIG_VAL,
         }
     }
 
+    /// Builds [`Youtube`]
     pub fn build(&'b self) -> Youtube<'b> {
         Youtube {
             config: self.config,

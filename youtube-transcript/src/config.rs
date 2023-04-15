@@ -11,8 +11,9 @@ impl Default for HTMLParserConfig {
         }
     }
 }
+/// configuration that contains anchor points for identifying captions from youtube's html webpage.
 pub struct Config {
-    pub parser: HTMLParserConfig,
+    pub(crate) parser: HTMLParserConfig,
 }
 impl Default for Config {
     fn default() -> Self {

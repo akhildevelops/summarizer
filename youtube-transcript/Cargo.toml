@@ -5,7 +5,7 @@ version.workspace = true
 edition.workspace = true
 license = "MIT"
 readme = "Readme.md"
-repository.workspace = true
+repository = "https://github.com/akhildevelops/summarizer/tree/main/youtube-transcript"
 
 
 [dependencies]
