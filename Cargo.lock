@@ -1132,7 +1132,7 @@ checksum = "73473c0e59e6d5812c5dfe2a064a6444949f089e20eec9a2e5506596494e4623"
 
 [[package]]
 name = "summarizer"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "async-openai",
  "tokio",
@@ -1693,7 +1693,7 @@ checksum = "4d25c75bf9ea12c4040a97f829154768bbbce366287e2dc044af160cd79a13fd"
 
 [[package]]
 name = "youtube-transcript"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "clap",
  "reqwest",

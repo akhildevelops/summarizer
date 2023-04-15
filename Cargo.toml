@@ -3,9 +3,10 @@
 members = ["youtube-transcript", "summarizer"]
 resolver = "2"
 
+
 [workspace.package]
 edition = "2021"
-version = "0.1.0"
+version = "0.1.1"
 
 [workspace.dependencies]
 async-openai = { version = "~0.10" }
