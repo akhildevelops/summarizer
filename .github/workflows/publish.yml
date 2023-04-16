@@ -12,7 +12,9 @@ jobs:
             matrix:
                 package: [youtube-transcript]
         steps:
-            - name: Setup
-              uses: ./.github/workflows/common.yml
+            - name: Checkout
+              uses: actions/checkout@v3
+            - name: Rust tooling
+              uses: dtolnay/rust-toolchain@stable
             - name: publish
               run: cargo publish -p ${{ matrix.package }}

@@ -10,8 +10,10 @@ jobs:
     tests-package:
         runs-on: ubuntu-latest
         steps:
-            - name: Setup
-              uses: ./.github/workflows/common.yml
+            - name: Checkout
+              uses: actions/checkout@v3
+            - name: Rust tooling
+              uses: dtolnay/rust-toolchain@stable
             - name: Test Rust
               run: cargo test
 
