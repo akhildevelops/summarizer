@@ -4,8 +4,9 @@ on:
     push:
         tags:
           - "v*.*.*"
+
 jobs:
-    publish-artifact:
+    github-artifact:
         runs-on: ubuntu-latest
         strategy:
             matrix:
@@ -21,6 +22,8 @@ jobs:
               run: cargo build --release
             - name: Release
               uses: softprops/action-gh-release@v1
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with: 
                 files: target/release/youtube-transcript
 
