@@ -2,13 +2,8 @@ name: Release
 
 on:
     push:
-        branches:
-            - main
-        paths:
-            - 'Cargo.toml'
-            - 'Cargo.lock'
         tags:
-            - "v*.*.*"
+          - "v*.*.*"
 
 jobs:
     publish-artifact:
