@@ -29,8 +29,9 @@ jobs:
     publish-crate:
       runs-on: ubuntu-latest
       environment: production
+      env:
+        CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
       needs: [github-artifact]
-
       strategy:
           matrix:
               package: [youtube-transcript]
@@ -42,6 +43,4 @@ jobs:
           - name: Cache rust
             uses: Swatinem/rust-cache@v2
           - name: publish
-            env:
-              CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
             run: cargo publish -p ${{ matrix.package }}
