@@ -1,8 +1,11 @@
-name: Publist to crates
+name: Publish to crates
 
 on:
-    release:
-        types: [published]
+    workflow_run:
+        workflows: ["Release"]
+        branches:
+          - 'main'
+        types: ["completed"]
 
 jobs:
     publish-crate:
