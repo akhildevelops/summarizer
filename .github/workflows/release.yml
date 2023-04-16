@@ -26,4 +26,19 @@ jobs:
               with: 
                 files: target/release/youtube-transcript
 
-            
+    publish-crate:
+      runs-on: ubuntu-latest
+      environment: production
+      needs: [github-artifact]
+      strategy:
+          matrix:
+              package: [youtube-transcript]
+      steps:
+          - name: Checkout
+            uses: actions/checkout@v3
+          - name: Rust tooling
+            uses: dtolnay/rust-toolchain@stable
+          - name: Cache rust
+            uses: Swatinem/rust-cache@v2
+          - name: publish
+            run: cargo publish -p ${{ matrix.package }}
