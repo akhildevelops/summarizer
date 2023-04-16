@@ -16,5 +16,7 @@ jobs:
               uses: actions/checkout@v3
             - name: Rust tooling
               uses: dtolnay/rust-toolchain@stable
+            - name: Cache rust
+              uses: Swatinem/rust-cache@v2
             - name: publish
               run: cargo publish -p ${{ matrix.package }}
