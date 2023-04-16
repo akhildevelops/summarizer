@@ -1,0 +1,29 @@
+name: Release
+
+on:
+    push:
+        branches:
+            - main
+        paths:
+            - 'Cargo.toml'
+            - 'Cargo.lock'
+        tags:
+            - "v*.*.*"
+
+jobs:
+    publish-artifact:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                package: [youtube-transcript]
+        steps:
+            - name: Setup
+              uses: ./.github/workflows/common.yml
+            - name: generate artifacts
+              run: cargo build --release
+            - name: Release
+              uses: softprops/action-gh-release@v1
+              with: 
+                files: target/release/youtube-transcript
+
+            
