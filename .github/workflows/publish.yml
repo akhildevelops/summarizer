@@ -1,0 +1,20 @@
+name: Publist to crates
+
+on:
+    release:
+        types: [published]
+
+jobs:
+    publish-crate:
+        runs-on: ubuntu-latest
+        environment: production
+        strategy:
+            matrix:
+                package: [youtube-transcript]
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+            - name: Rust tooling
+              uses: dtolnay/rust-toolchain@stable
+            - name: publish
+              run: cargo publish -p ${{ matrix.package }}

@@ -1,0 +1,31 @@
+name: Release
+
+on:
+    push:
+        branches:
+            - main
+        paths:
+            - 'Cargo.toml'
+            - 'Cargo.lock'
+        tags:
+            - "v*.*.*"
+
+jobs:
+    publish-artifact:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                package: [youtube-transcript]
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+            - name: Rust tooling
+              uses: dtolnay/rust-toolchain@stable
+            - name: generate artifacts
+              run: cargo build --release
+            - name: Release
+              uses: softprops/action-gh-release@v1
+              with: 
+                files: target/release/youtube-transcript
+
+            
