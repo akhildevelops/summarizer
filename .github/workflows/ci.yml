@@ -5,8 +5,13 @@ on:
         branches:
           - main
         paths-ignore:
-          - .github/workflows/publish.yml
-          - .github/workflows/release.yml
+          - '.github/workflows/publish.yml'
+          - '.github/workflows/release.yml'
+          - '**README.md'
+          - '.vscode/**'
+          - '.gitignore'
+          - 'LICENSE'
+
     merge_group:
     
 jobs:
