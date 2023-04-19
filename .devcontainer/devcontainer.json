@@ -4,6 +4,8 @@
 	"name": "Ubuntu",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"image": "mcr.microsoft.com/devcontainers/base:jammy",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "devcontainer",
 	"features": {
 		"ghcr.io/devcontainers/features/node:1": {
 			"nodeGypDependencies": true,
@@ -30,7 +32,7 @@
 		"vscode": {
 			"extensions": [
 				"mhutchie.git-graph",
-				"eamodio.gitlens",
+				"eamodio.gitlens"
 			]
 		}
 	}
