@@ -3,8 +3,8 @@
 {
 	"name": "Ubuntu",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/base:jammy",
 	"dockerComposeFile": "docker-compose.yml",
+	"workspaceFolder": "/workspace/${localWorkspaceFolderBasename}",
 	"service": "devcontainer",
 	"features": {
 		"ghcr.io/devcontainers/features/node:1": {
@@ -12,9 +12,8 @@
 			"version": "lts"
 		},
 		"ghcr.io/devcontainers/features/python:1": {
-			"installTools": true,
-			"installJupyterlab": true,
-			"version": "latest"
+			"installTools": false,
+			"installJupyterlab": false
 		},
 		"ghcr.io/devcontainers/features/rust:1": {
 			"version": "latest",

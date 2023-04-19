@@ -3,7 +3,7 @@ services:
   devcontainer:
     image: mcr.microsoft.com/devcontainers/base:jammy
     volumes:
-    - ../..:/workspaces:cached
+    - ../../:/workspace:cached
     network_mode: service:db
     command: sleep infinity
 
