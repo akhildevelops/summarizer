@@ -18,6 +18,12 @@
 		"ghcr.io/devcontainers/features/rust:1": {
 			"version": "latest",
 			"profile": "default"
+		},
+		"ghcr.io/akhildevelops/devcontainer-features/apt": {
+			"PACKAGES": "postgresql-client"
+		},
+		"ghcr.io/devcontainers-contrib/features/bash-command": {
+			"command": "cargo install sqlx-cli"
 		}
 	},
 	// Features to add to the dev container. More info: https://containers.dev/features.
@@ -31,7 +37,8 @@
 		"vscode": {
 			"extensions": [
 				"mhutchie.git-graph",
-				"eamodio.gitlens"
+				"eamodio.gitlens",
+				"cweijan.vscode-database-client2"
 			]
 		}
 	}
