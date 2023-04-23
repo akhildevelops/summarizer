@@ -6,7 +6,6 @@ edition.workspace = true
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-# sqlx = { workspace = true, features = ["postgres", "runtime-tokio-native-tls"] }
 async-openai = { workspace = true }
 youtube-transcript = { path = "../youtube-transcript" }
 tokio = { workspace = true, features = ["rt-multi-thread"] }
@@ -14,3 +13,4 @@ apalis = { workspace = true, features = ["postgres", "extensions"] }
 serde = { workspace = true, features = ["derive"] }
 sqlx = { workspace = true, features = ["runtime-tokio-rustls"] }
 anyhow = { workspace = true }
+chrono = { workspace = true }

@@ -8,11 +8,18 @@ use tokio;
 #[tokio::main]
 async fn main() -> Result<(), Serror> {
     let postgres_url = env_var("DATABASE_URL")?;
-    let you = Youtubelink("https://www.youtube.com/watch?v=GJLlxj_dtq8".to_string());
+    let links = [
+        "https://www.youtube.com/watch?v=sBH-ngpL0zo",
+        "https://www.youtube.com/watch?v=WYNRt-AwoUg",
+        "https://www.youtube.com/watch?v=fPWzeFYtjfc",
+    ];
     let mut storage: PostgresStorage<Youtubelink> = PostgresStorage::connect(postgres_url).await?;
-    let _job = storage
-        .push(you)
-        .await
-        .map_err(|_| Serror::Database("asdf".to_string()))?;
+    for link in links {
+        let you = Youtubelink(link.to_string());
+        let _job = storage
+            .push(you)
+            .await
+            .map_err(|_| Serror::Database("asdf".to_string()))?;
+    }
     Ok(())
 }

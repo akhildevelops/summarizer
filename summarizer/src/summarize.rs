@@ -1,9 +1,12 @@
 use crate::default;
+use crate::error::Serror;
 use async_openai::{
-    types::{ChatCompletionRequestMessageArgs, CreateChatCompletionRequestArgs, Role},
+    types::{
+        ChatCompletionRequestMessageArgs, CreateChatCompletionRequestArgs,
+        CreateChatCompletionResponse, Role,
+    },
     Client,
 };
-use std::error::Error;
 
 pub trait Summarize {
     fn description(&self) -> &str;
@@ -12,7 +15,7 @@ pub trait Summarize {
 pub struct Summarizer;
 
 impl Summarizer {
-    pub async fn summarize(x: &impl Summarize) -> Result<String, Box<dyn Error>> {
+    pub async fn summarize(x: &impl Summarize) -> Result<CreateChatCompletionResponse, Serror> {
         let client = Client::new();
         let request = CreateChatCompletionRequestArgs::default()
             .model(default::GPT_MODEL)
@@ -27,9 +30,7 @@ impl Summarizer {
                     .build()?,
             ])
             .build()?;
-        let response = client.chat().create(request).await?;
-
-        Ok(format!("{:?}", response))
+        Ok(client.chat().create(request).await?)
     }
 }
 
@@ -50,6 +51,7 @@ mod test {
     #[ignore = "Requires mocking openai response"]
     async fn summarize() {
         let resp = Summarizer::summarize(&DUMMY).await.unwrap();
-        println!("{resp}")
+        let content = resp.choices.into_iter().next().unwrap().message.content;
+        println!("{content}")
     }
 }

@@ -1,4 +1,5 @@
 use anyhow::Error as anyhowError;
+use async_openai::error::OpenAIError;
 use sqlx::Error as Sqlxerror;
 use std::env::VarError;
 use std::io::Error as Ioerror;
@@ -10,6 +11,7 @@ pub enum Serror {
     Database(String),
     Environment(String),
     Other(String),
+    OpenAIError(String),
 }
 
 impl Display for Serror {
@@ -20,6 +22,7 @@ impl Display for Serror {
             Self::Database(x) => write!(f, "Database: {}", x),
             Self::Environment(x) => write!(f, "Environment {}", x),
             Self::Other(x) => write!(f, "Other: {}", x),
+            Self::OpenAIError(x) => write!(f, "Openai: {}", x),
         }
     }
 }
@@ -47,5 +50,11 @@ impl From<VarError> for Serror {
 impl From<anyhowError> for Serror {
     fn from(value: anyhowError) -> Self {
         Self::Other(value.to_string())
+    }
+}
+
+impl From<OpenAIError> for Serror {
+    fn from(value: OpenAIError) -> Self {
+        Self::OpenAIError(value.to_string())
     }
 }

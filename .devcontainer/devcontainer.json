@@ -20,12 +20,18 @@
 			"profile": "default"
 		},
 		"ghcr.io/akhildevelops/devcontainer-features/apt": {
-			"PACKAGES": "postgresql-client"
+			"PACKAGES": "postgresql-client,pkg-config"
 		},
 		"ghcr.io/devcontainers-contrib/features/bash-command": {
 			"command": "cargo install sqlx-cli"
 		}
 	},
+	"overrideFeatureInstallOrder": [
+		"ghcr.io/akhildevelops/devcontainer-features/apt",
+		"ghcr.io/devcontainers/features/rust:1",
+		"ghcr.io/devcontainers-contrib/features/bash-command"
+	],
+	"postAttachCommand": "cat .env | xargs -n 1 echo export $1 >> ~/.bashrc",
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
