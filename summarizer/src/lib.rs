@@ -3,6 +3,7 @@ mod default;
 pub mod error;
 pub mod scheduler;
 mod summarize;
+mod tokenize;
 pub mod utils;
 mod youtube;
 pub use summarize::Summarizer;

@@ -12,6 +12,7 @@ pub enum Serror {
     Environment(String),
     Other(String),
     OpenAIError(String),
+    Tokenize(String),
 }
 
 impl Display for Serror {
@@ -23,6 +24,7 @@ impl Display for Serror {
             Self::Environment(x) => write!(f, "Environment {}", x),
             Self::Other(x) => write!(f, "Other: {}", x),
             Self::OpenAIError(x) => write!(f, "Openai: {}", x),
+            Self::Tokenize(x) => writeln!(f, "Tokenize: {}", x),
         }
     }
 }
