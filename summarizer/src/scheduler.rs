@@ -21,6 +21,9 @@ pub async fn transcript_summary(
     let pgpool = ctx
         .data_opt::<PgPool>()
         .ok_or_else(|| Serror::Other("Cannot observe Pgpool connection".to_string()))?;
+    let summarizer = ctx
+        .data_opt::<Summarizer>()
+        .ok_or(Serror::Other("Summarizer cannot be found".to_string()))?;
     let pm = Postgresmethods::new(&pgpool);
     let youtube_link: Youtubelink = job.into();
     let remote_url = pm.insert_remoteurl(&youtube_link.0).await?;
@@ -28,26 +31,21 @@ pub async fn transcript_summary(
     let ts = pm
         .insert_transcript(content.description(), &remote_url)
         .await?;
-    let _summary = Summarizer::summarize(&content).await?;
-    let content = _summary
-        .choices
-        .into_iter()
-        .next()
-        .ok_or_else(|| Serror::OpenAIError("Cannot find summary".to_string()))?
-        .message
-        .content;
-    pm.insert_transcriptsummary(&content, &ts).await?;
+    let _summary = summarizer.summarize(&content).await?;
+    pm.insert_transcriptsummary(&_summary, &ts).await?;
     Ok(())
 }
 
 pub async fn setup_youtube_data_workers(postgres_url: &str) -> Result<(), Serror> {
     let pgpool = PgPool::connect(&postgres_url).await?;
     let ps_client = PostgresStorage::<Youtubelink>::new(pgpool.clone());
+    let summarizer = Summarizer::default_params()?;
     ps_client.setup().await?;
     Monitor::new()
         .register_with_count(1, |_| {
             WorkerBuilder::new(ps_client.clone())
                 .layer(Extension(pgpool.clone()))
+                .layer(Extension(summarizer.clone()))
                 .build_fn(transcript_summary)
         })
         .run()

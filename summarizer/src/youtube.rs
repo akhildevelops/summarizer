@@ -16,7 +16,11 @@ impl<'a> Youtube<'a> {
             .await
             .map_err(|x| Serror::Youtubefetch(x.to_string()))?;
         Ok(YoutubeContent {
-            content: transcript.into(),
+            content: transcript
+                .transcripts
+                .into_iter()
+                .map(|x| format!("{} ", x.text))
+                .collect(),
         })
     }
 }

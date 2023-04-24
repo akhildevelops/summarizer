@@ -1,5 +1,3 @@
-use std::ops::Add;
-
 use crate::error::Serror;
 use tiktoken_rs::CoreBPE;
 pub struct Tokens<'a> {
@@ -42,7 +40,7 @@ impl<'a> MultiTokens<'a> {
     }
 }
 
-trait Tokenizer {
+pub trait Tokenizer {
     const MAX_N_TOKENS: usize;
     fn bpe(&self) -> &CoreBPE;
     fn tokenize(&self, text: &str) -> Tokens {
@@ -93,6 +91,11 @@ mod test {
     fn test_a_tokenize() {
         let dt = DummToken(cl100k_base().unwrap());
         assert_eq!(dt.tokenize("a").tokens, [64]);
+    }
+    #[test]
+    fn test_a_multitokenize() {
+        let dt = DummToken(cl100k_base().unwrap());
+        assert_eq!(dt.tokenize_in_max_tokenlimit("a").unwrap().tokens, [[64]]);
     }
     #[test]
     fn test_abcd_tokenize() {

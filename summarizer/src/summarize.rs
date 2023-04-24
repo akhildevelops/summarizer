@@ -1,42 +1,97 @@
 use crate::default;
 use crate::error::Serror;
+use crate::tokenize::{OpenAI, Tokenizer};
 use async_openai::{
-    types::{
-        ChatCompletionRequestMessageArgs, CreateChatCompletionRequestArgs,
-        CreateChatCompletionResponse, Role,
-    },
+    types::{ChatCompletionRequestMessageArgs, CreateChatCompletionRequestArgs, Role},
     Client,
 };
+use futures::future::join_all;
 
 pub trait Summarize {
     fn description(&self) -> &str;
 }
 
-pub struct Summarizer;
+impl Summarize for String {
+    fn description(&self) -> &str {
+        &self
+    }
+}
+
+#[derive(Clone)]
+pub struct Summarizer {
+    openai: OpenAI,
+    client: Client,
+}
 
 impl Summarizer {
-    pub async fn summarize(x: &impl Summarize) -> Result<CreateChatCompletionResponse, Serror> {
-        let client = Client::new();
-        let request = CreateChatCompletionRequestArgs::default()
-            .model(default::GPT_MODEL)
-            .messages([
-                ChatCompletionRequestMessageArgs::default()
-                    .role(Role::System)
-                    .content(default::SYSTEM_PROMPT)
-                    .build()?,
-                ChatCompletionRequestMessageArgs::default()
-                    .role(Role::User)
-                    .content(x.description())
-                    .build()?,
-            ])
-            .build()?;
-        Ok(client.chat().create(request).await?)
+    pub fn default_params() -> Result<Self, Serror> {
+        Ok(Self {
+            openai: OpenAI::default_params()?,
+            client: Client::new(),
+        })
+    }
+}
+
+impl Summarizer {
+    pub async fn summarize(&self, x: &impl Summarize) -> Result<String, Serror> {
+        let client = &self.client;
+        let chat = client.chat();
+        let mut interm: String;
+        let mut content = x.description();
+        loop {
+            let segments = self
+                .openai
+                .tokenize_in_max_tokenlimit(content)?
+                .detokenize_inarray()?;
+            let all_requests: Vec<Result<_, Serror>> = segments
+                .iter()
+                .map(|x| {
+                    let request = CreateChatCompletionRequestArgs::default()
+                        .model(default::GPT_MODEL)
+                        .messages([
+                            ChatCompletionRequestMessageArgs::default()
+                                .role(Role::System)
+                                .content(default::SYSTEM_PROMPT)
+                                .build()?,
+                            ChatCompletionRequestMessageArgs::default()
+                                .role(Role::User)
+                                .content(x.description())
+                                .build()?,
+                        ])
+                        .build()?;
+                    Ok(chat.create(request))
+                })
+                .collect::<Vec<_>>();
+            if all_requests.len() == 1 {
+                return Ok(all_requests
+                    .into_iter()
+                    .next()
+                    .ok_or(Serror::Other("cannot find first request".to_string()))??
+                    .await?
+                    .choices
+                    .into_iter()
+                    .next()
+                    .ok_or(Serror::Other("cannot find summary".to_string()))?
+                    .message
+                    .content);
+            } else {
+                let futures = all_requests.into_iter().filter_map(|x| x.ok());
+                interm = join_all(futures)
+                    .await
+                    .into_iter()
+                    // .filter_map(|x| Some(x.ok()?.choices.into_iter().next()?.message.content))
+                    .filter_map(|x| Some(x.unwrap().choices.into_iter().next()?.message.content))
+                    .collect::<String>();
+                content = &interm;
+            }
+        }
     }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
+    use crate::Youtube;
     struct DUMMY;
     impl Summarize for DUMMY {
         fn description(&self) -> &str {
@@ -50,8 +105,32 @@ mod test {
     #[tokio::test]
     #[ignore = "Requires mocking openai response"]
     async fn summarize() {
-        let resp = Summarizer::summarize(&DUMMY).await.unwrap();
-        let content = resp.choices.into_iter().next().unwrap().message.content;
-        println!("{content}")
+        let summarizer = Summarizer::default_params().unwrap();
+        let resp = summarizer.summarize(&DUMMY).await.unwrap();
+        println!("{resp}")
+    }
+
+    #[tokio::test]
+    #[ignore = "Requires mocking openai response"]
+    async fn summarize_youtube_small() {
+        let content = Youtube::link("https://www.youtube.com/watch?v=GJLlxj_dtq8")
+            .content()
+            .await
+            .unwrap();
+        let summarizer = Summarizer::default_params().unwrap();
+        let resp = summarizer.summarize(&content).await.unwrap();
+        println!("{resp}")
+    }
+
+    #[tokio::test]
+    #[ignore = "Requires mocking openai response"]
+    async fn summarize_youtube_1hr() {
+        let content = Youtube::link("https://www.youtube.com/watch?v=sBH-ngpL0zo")
+            .content()
+            .await
+            .unwrap();
+        let summarizer = Summarizer::default_params().unwrap();
+        let resp = summarizer.summarize(&content).await.unwrap();
+        println!("{resp}")
     }
 }

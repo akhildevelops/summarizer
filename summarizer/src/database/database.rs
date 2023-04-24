@@ -27,7 +27,7 @@ impl<'a> Postgresmethods<'a> {
         remote_url: &Remoteurl,
     ) -> Result<Transcript, Error> {
         let insert_query = format!(
-            "INSERT INTO transcript (remote_id,content) VALUES ({},'{}') RETURNING *",
+            "INSERT INTO transcript (remote_id,content) VALUES ({},'{}') RETURNING id, created_at, remote_id",
             remote_url.id, transcript
         );
         sqlx::query_as::<_, Transcript>(&insert_query)
@@ -40,7 +40,7 @@ impl<'a> Postgresmethods<'a> {
         transcript: &Transcript,
     ) -> Result<TranscriptSummary, Error> {
         let insert_query = format!(
-            "INSERT INTO transcriptsummary (transcript_id,content) VALUES ({},'{}') RETURNING *",
+            "INSERT INTO transcriptsummary (transcript_id,content) VALUES ({},'{}') RETURNING id, created_at, transcript_id",
             transcript.id, summary
         );
         sqlx::query_as::<_, TranscriptSummary>(&insert_query)

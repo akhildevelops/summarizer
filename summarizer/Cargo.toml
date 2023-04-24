@@ -15,3 +15,4 @@ sqlx = { workspace = true, features = ["runtime-tokio-rustls"] }
 anyhow = { workspace = true }
 chrono = { workspace = true }
 tiktoken-rs = { version = "~0.4" }
+futures = { workspace = true }
