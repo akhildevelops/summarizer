@@ -18,7 +18,7 @@ roxmltree = { version = "~0.18" }
 reqwest = { version = "~0.11" }
 clap = { version = "4.2.1", features = ["string"] }
 once_cell = { version = "~1.17" }
-apalis = { path = "../apalis" }
+apalis = { git = "https://github.com/akhildevelops/apalis.git", branch = "summarizer" }
 sqlx = { version = "~0.5" }
 anyhow = { version = "~1.0" }
 chrono = { version = "~0.4" }
