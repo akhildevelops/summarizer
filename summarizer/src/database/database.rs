@@ -56,6 +56,7 @@ mod test {
     use super::*;
     use chrono::NaiveDateTime;
     #[tokio::test]
+    #[ignore = "Will activate after mocking db"]
     async fn insert_trans() {
         let p_url = "postgres://postgres:postgres@db/summarizer";
         let pool = PgPool::connect(p_url).await.unwrap();
