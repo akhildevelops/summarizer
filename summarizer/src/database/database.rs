@@ -26,6 +26,7 @@ impl<'a> Postgresmethods<'a> {
         transcript: &str,
         remote_url: &Remoteurl,
     ) -> Result<Transcript, Error> {
+        let transcript = transcript.replace("'", "''"); // Escape single quotes
         let insert_query = format!(
             "INSERT INTO transcript (remote_id,content) VALUES ({},'{}') RETURNING id, created_at, remote_id",
             remote_url.id, transcript
@@ -39,6 +40,7 @@ impl<'a> Postgresmethods<'a> {
         summary: &str,
         transcript: &Transcript,
     ) -> Result<TranscriptSummary, Error> {
+        let summary = summary.replace("'", "''"); // Escape single quotes
         let insert_query = format!(
             "INSERT INTO transcriptsummary (transcript_id,content) VALUES ({},'{}') RETURNING id, created_at, transcript_id",
             transcript.id, summary

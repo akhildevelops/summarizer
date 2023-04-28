@@ -79,8 +79,11 @@ impl Summarizer {
                 interm = join_all(futures)
                     .await
                     .into_iter()
-                    // .filter_map(|x| Some(x.ok()?.choices.into_iter().next()?.message.content))
-                    .filter_map(|x| Some(x.unwrap().choices.into_iter().next()?.message.content))
+                    .filter_map(|x| {
+                        let x = x.unwrap().choices.into_iter().next()?.message.content;
+                        println!("{x}");
+                        Some(x)
+                    })
                     .collect::<String>();
                 content = &interm;
             }
@@ -113,10 +116,13 @@ mod test {
     #[tokio::test]
     #[ignore = "Requires mocking openai response"]
     async fn summarize_youtube_small() {
-        let content = Youtube::link("https://www.youtube.com/watch?v=GJLlxj_dtq8")
+        let content = Youtube::link("https://www.youtube.com/watch?v=WYNRt-AwoUg")
             .content()
             .await
             .unwrap();
+        for var in std::env::vars() {
+            println!("{:?}", var)
+        }
         let summarizer = Summarizer::default_params().unwrap();
         let resp = summarizer.summarize(&content).await.unwrap();
         println!("{resp}")
