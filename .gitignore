@@ -8,3 +8,6 @@ scrap/
 
 #Editor
 .vscode/
+
+# book
+book.txt
