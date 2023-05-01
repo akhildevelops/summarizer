@@ -18,6 +18,7 @@
                 console.log("Does nothing"); // To ignore the ay11 warning
             }}
         >
+            <img src={card.image.toString()} alt="Podcast Summary" />
             <p>{card.title}</p>
         </div>
     {/each}
@@ -53,6 +54,12 @@
         border: 0.1em solid white;
         margin: 2em;
     }
+
+    .card > img {
+        width: 100%;
+        height: auto;
+        cursor: pointer;
+    }
     .pop-box {
         position: fixed;
         border: 0.1em solid white;
@@ -77,8 +84,6 @@
     .pop-box > .header > .cross {
         position: fixed;
         margin-left: 34em;
-    }
-    .pop-box > .header > .cross:hover {
         cursor: pointer;
     }
 </style>
