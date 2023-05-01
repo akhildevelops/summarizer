@@ -24,6 +24,9 @@
     {#if visible}
         <div class="pop-box">
             <div class="header">
+                <div class="title">
+                    {pop_card.title}
+                </div>
                 <div
                     class="cross"
                     on:click={() => (visible = !visible)}
@@ -32,9 +35,6 @@
                     }}
                 >
                     ❌
-                </div>
-                <div class="title">
-                    {pop_card.title}
                 </div>
             </div>
             <div class="text">
@@ -60,7 +60,6 @@
         height: 20em;
         width: 78em;
         text-align: justify;
-        /* display: {display}; */
     }
     .pop-box > .text {
         position: relative;
@@ -71,10 +70,13 @@
         position: relative;
         text-align: center;
         top: 1em;
-        right: 1em;
+    }
+    .pop-box > .header > * {
+        display: inline;
     }
     .pop-box > .header > .cross {
-        text-align: right;
+        position: fixed;
+        margin-left: 34em;
     }
     .pop-box > .header > .cross:hover {
         cursor: pointer;
