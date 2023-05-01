@@ -8,7 +8,7 @@ edition.workspace = true
 [dependencies]
 async-openai = { workspace = true }
 youtube-transcript = { path = "../youtube-transcript" }
-tokio = { workspace = true, features = ["rt-multi-thread"] }
+tokio = { workspace = true, features = ["rt-multi-thread", "macros"] }
 apalis = { workspace = true, features = ["postgres", "extensions"] }
 serde = { workspace = true, features = ["derive"] }
 sqlx = { workspace = true, features = ["runtime-tokio-rustls"] }
@@ -16,3 +16,5 @@ anyhow = { workspace = true }
 chrono = { workspace = true }
 tiktoken-rs = { version = "~0.4" }
 futures = { workspace = true }
+env_logger = { workspace = true }
+log = { workspace = true }
