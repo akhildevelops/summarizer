@@ -18,3 +18,6 @@ tiktoken-rs = { version = "~0.4" }
 futures = { workspace = true }
 env_logger = { workspace = true }
 log = { workspace = true }
+axum = { workspace = true }
+axum-core = { version = "~0.3.4" }
+serde_json = { workspace = true }

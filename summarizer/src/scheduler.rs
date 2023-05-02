@@ -7,6 +7,7 @@ use apalis::postgres::PostgresStorage;
 use apalis::prelude::*;
 use serde::{Deserialize, Serialize};
 use sqlx::postgres::PgPool;
+
 #[derive(Deserialize, Serialize)]
 pub struct Youtubelink(pub String);
 
@@ -39,7 +40,7 @@ pub async fn transcript_summary(
 pub async fn setup_youtube_data_workers(postgres_url: &str) -> Result<(), Serror> {
     let pgpool = PgPool::connect(&postgres_url).await?;
     let ps_client = PostgresStorage::<Youtubelink>::new(pgpool.clone());
-
+    ps_client.setup().await?;
     let summarizer = Summarizer::default_params()?;
     ps_client.setup().await?;
     Monitor::new()

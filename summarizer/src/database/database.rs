@@ -1,4 +1,4 @@
-use super::models::{Remoteurl, Transcript, TranscriptSummary};
+use super::models::{Remoteurl, Summary, Transcript, TranscriptSummary};
 use sqlx::postgres::PgPool;
 use sqlx::Error;
 pub(crate) struct Postgresmethods<'a> {
@@ -12,6 +12,14 @@ impl<'a> Postgresmethods<'a> {
 }
 
 impl<'a> Postgresmethods<'a> {
+    pub(crate) async fn get_summaries(&self) -> Result<Vec<Summary>, Error> {
+        let query = "SELECT ts.created_at, ts.content, remoteurl.link FROM transcriptsummary ts 
+        JOIN transcript ON ts.transcript_id=transcript.id
+        JOIN remoteurl ON transcript.remote_id=remoteurl.id";
+        sqlx::query_as::<_, Summary>(query)
+            .fetch_all(self.client)
+            .await
+    }
     pub(crate) async fn insert_remoteurl(&self, url: &str) -> Result<Remoteurl, Error> {
         let insert_query = format!(
             "INSERT INTO remoteurl (link) VALUES ('{}') RETURNING *",
