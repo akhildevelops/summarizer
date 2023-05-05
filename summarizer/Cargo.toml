@@ -11,7 +11,8 @@ youtube-transcript = { path = "../youtube-transcript" }
 tokio = { workspace = true, features = ["rt-multi-thread", "macros"] }
 apalis = { workspace = true, features = ["postgres", "extensions"] }
 serde = { workspace = true, features = ["derive"] }
-sqlx = { workspace = true, features = ["runtime-tokio-rustls"] }
+sqlx = { workspace = true, features = ["postgres"] }
+openssl = { version = "0.10", features = ["vendored"] }
 anyhow = { workspace = true }
 chrono = { workspace = true }
 tiktoken-rs = { version = "~0.4" }
