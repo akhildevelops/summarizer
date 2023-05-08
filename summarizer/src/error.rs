@@ -1,10 +1,15 @@
 use anyhow::Error as anyhowError;
 use async_openai::error::OpenAIError;
+use axum::extract::Json;
+use axum_core::response::IntoResponse;
+use serde::Serialize;
+use serde_json::Error as serde_jsonError;
 use sqlx::Error as Sqlxerror;
 use std::env::VarError;
 use std::io::Error as Ioerror;
 use std::{error::Error, fmt::Display};
-#[derive(Debug)]
+
+#[derive(Debug, Serialize)]
 pub enum Serror {
     Youtubefetch(String),
     Scheduler(String),
@@ -13,6 +18,12 @@ pub enum Serror {
     Other(String),
     OpenAIError(String),
     Tokenize(String),
+}
+
+impl IntoResponse for Serror {
+    fn into_response(self) -> axum_core::response::Response {
+        Json(self).into_response()
+    }
 }
 
 impl Display for Serror {
@@ -58,5 +69,11 @@ impl From<anyhowError> for Serror {
 impl From<OpenAIError> for Serror {
     fn from(value: OpenAIError) -> Self {
         Self::OpenAIError(value.to_string())
+    }
+}
+
+impl From<serde_jsonError> for Serror {
+    fn from(value: serde_jsonError) -> Self {
+        Self::Other(value.to_string())
     }
 }

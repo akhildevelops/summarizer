@@ -1,3 +1,4 @@
+pub mod api;
 mod database;
 mod default;
 pub mod error;

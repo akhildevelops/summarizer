@@ -23,15 +23,17 @@
 			"PACKAGES": "postgresql-client,pkg-config"
 		},
 		"ghcr.io/devcontainers-contrib/features/bash-command": {
-			"command": "cargo install sqlx-cli"
-		}
+			"command": "cargo install sqlx-cli cross"
+		},
+		"ghcr.io/devcontainers/features/docker-in-docker": {}
 	},
 	"overrideFeatureInstallOrder": [
 		"ghcr.io/akhildevelops/devcontainer-features/apt",
 		"ghcr.io/devcontainers/features/rust:1",
 		"ghcr.io/devcontainers-contrib/features/bash-command"
 	],
-	"postAttachCommand": "cat .env | xargs -n 1 echo export $1 >> ~/.bashrc",
+	// Chowning is a workaround.
+	"postAttachCommand": "cat .env | xargs -n 1 echo export $1 >> ~/.bashrc && sudo chown -R vscode:rustlang /usr/local/cargo",
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
@@ -44,10 +46,12 @@
 			"extensions": [
 				"mhutchie.git-graph",
 				"eamodio.gitlens",
-				"cweijan.vscode-database-client2"
+				"cweijan.vscode-database-client2",
+				"svelte.svelte-vscode"
 			]
 		}
-	}
+	},
+	"containerUser": "vscode",
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
+	// "remoteUser": "vscode"
 }
