@@ -27,6 +27,10 @@ env_logger = { version = "~0.10.0" }
 log = { version = "~0.4.17" }
 axum = { version = "~0.6" }
 regex = { version = "1" }
+tower = { version = "0.4", features = ["util"] }
+tower-http = { version = "0.4", features = ["fs"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 [profile.release]
 panic = "abort"
 lto = "fat"

@@ -20,6 +20,7 @@ impl<'a> Postgresmethods<'a> {
             .fetch_all(self.client)
             .await
     }
+
     pub(crate) async fn insert_remoteurl(
         &self,
         url: &str,
