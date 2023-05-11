@@ -47,7 +47,7 @@ impl<'a> Youtube<'a> {
 #[derive(Debug)]
 pub struct YoutubeContent {
     content: String,
-    video_id: String,
+    pub(crate) video_id: String,
 }
 
 impl YoutubeContent {

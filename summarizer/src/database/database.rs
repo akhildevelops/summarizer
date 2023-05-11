@@ -20,10 +20,15 @@ impl<'a> Postgresmethods<'a> {
             .fetch_all(self.client)
             .await
     }
-    pub(crate) async fn insert_remoteurl(&self, url: &str) -> Result<Remoteurl, Error> {
+    pub(crate) async fn insert_remoteurl(
+        &self,
+        url: &str,
+        image_id: &str,
+        title: &str,
+    ) -> Result<Remoteurl, Error> {
         let insert_query = format!(
-            "INSERT INTO remoteurl (link) VALUES ('{}') RETURNING *",
-            url
+            "INSERT INTO remoteurl (link,image_id,title) VALUES ('{}','{}','{}') RETURNING *",
+            url, image_id, title
         );
         sqlx::query_as::<_, Remoteurl>(&insert_query)
             .fetch_one(self.client)
@@ -73,6 +78,8 @@ mod test {
             id: 1,
             created_at: NaiveDateTime::MIN,
             link: "sadf".to_string(),
+            image_id: "asfd".to_string(),
+            title: "asdf".to_string(),
         };
         pmethods
             .insert_transcript("asdfdsaf", &r_url)
