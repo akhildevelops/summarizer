@@ -103,4 +103,30 @@ mod test {
             .unwrap();
         println!("{}", content);
     }
+
+    #[tokio::test]
+    #[ignore = "Requires mocking youtube response"]
+    async fn test_title() {
+        let title = Youtube::link("https://www.youtube.com/watch?v=GJLlxj_dtq8")
+            .unwrap()
+            .content()
+            .await
+            .unwrap()
+            .title()
+            .unwrap()
+            .expect("No title found");
+        println!("{}", title);
+    }
+
+    #[tokio::test]
+    #[ignore = "Requires mocking youtube response"]
+    async fn test_image() {
+        let image_link = Youtube::link("https://www.youtube.com/watch?v=GJLlxj_dtq8")
+            .unwrap()
+            .content()
+            .await
+            .unwrap()
+            .image_link();
+        println!("{}", image_link);
+    }
 }
