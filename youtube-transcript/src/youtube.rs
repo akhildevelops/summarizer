@@ -14,10 +14,13 @@ impl<'b> Youtube<'b> {
     pub async fn transcript<'a>(&self, url: &'a str) -> Result<Transcript, Box<dyn Error>> {
         let client = Client::default();
         let response = client.get(url).send().await?;
-        let c = response
-            .text()
-            .await?
-            .caption(self.config.parser.from, self.config.parser.to)?;
+        let text = response.text().await?;
+        self.transcript_from_text(&text).await
+    }
+    /// extracts [`Transcript`] from the youtube raw html text provided.
+    pub async fn transcript_from_text(&self, text: &str) -> Result<Transcript, Box<dyn Error>> {
+        let client = Client::default();
+        let c = text.caption(self.config.parser.from, self.config.parser.to)?;
         let response = client.get(c.base_url).send().await?;
         let trans_resp = response.text().await?;
         let doc = Document::parse(&trans_resp)?;

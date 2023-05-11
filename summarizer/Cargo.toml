@@ -16,9 +16,11 @@ openssl = { version = "0.10", features = ["vendored"] }
 anyhow = { workspace = true }
 chrono = { workspace = true }
 tiktoken-rs = { version = "~0.4" }
-futures = { workspace = true }
+futures = { workspace = true, features = ["executor"] }
 env_logger = { workspace = true }
 log = { workspace = true }
 axum = { workspace = true }
 axum-core = { version = "~0.3.4" }
 serde_json = { workspace = true }
+reqwest = { workspace = true }
+regex = { workspace = true }

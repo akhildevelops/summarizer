@@ -1,7 +1,7 @@
+use crate::database::Postgresmethods;
 use crate::error::Serror;
 use crate::youtube::Youtube;
 use crate::Summarizer;
-use crate::{database::Postgresmethods, summarize::Summarize};
 use apalis::layers::Extension;
 use apalis::postgres::PostgresStorage;
 use apalis::prelude::*;
@@ -28,11 +28,13 @@ pub async fn transcript_summary(
     let pm = Postgresmethods::new(&pgpool);
     let youtube_link: Youtubelink = job.into();
     let remote_url = pm.insert_remoteurl(&youtube_link.0).await?;
-    let content = Youtube::link(&youtube_link.0).content().await?;
-    let ts = pm
-        .insert_transcript(content.description(), &remote_url)
+    let description = Youtube::link(&youtube_link.0)?
+        .content()
+        .await?
+        .transcript_text()
         .await?;
-    let _summary = summarizer.summarize(&content).await?;
+    let ts = pm.insert_transcript(&description, &remote_url).await?;
+    let _summary = summarizer.summarize(&description).await?;
     pm.insert_transcriptsummary(&_summary, &ts).await?;
     Ok(())
 }

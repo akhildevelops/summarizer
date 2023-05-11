@@ -9,3 +9,4 @@ pub mod utils;
 mod youtube;
 pub use summarize::Summarizer;
 pub use youtube::{Youtube, YoutubeContent};
+mod image;

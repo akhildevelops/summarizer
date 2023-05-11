@@ -2338,6 +2338,8 @@ dependencies = [
  "futures 0.3.28",
  "log",
  "openssl",
+ "regex",
+ "reqwest",
  "serde",
  "serde_json",
  "sqlx",

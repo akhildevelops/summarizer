@@ -139,7 +139,11 @@ mod test {
     async fn summarize_youtube_small() {
         log_init();
         let content = Youtube::link("https://www.youtube.com/watch?v=WYNRt-AwoUg")
+            .unwrap()
             .content()
+            .await
+            .unwrap()
+            .transcript_text()
             .await
             .unwrap();
         let summarizer = Summarizer::default_params().unwrap();
@@ -152,7 +156,11 @@ mod test {
     async fn summarize_youtube_1hr() {
         log_init();
         let content = Youtube::link("https://www.youtube.com/watch?v=sBH-ngpL0zo")
+            .unwrap()
             .content()
+            .await
+            .unwrap()
+            .transcript_text()
             .await
             .unwrap();
         let summarizer = Summarizer::default_params().unwrap();
