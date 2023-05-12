@@ -18,8 +18,7 @@ pub fn get_router(pgpool: PgPool) -> Router {
                     .route("/summaries", get(summaries))
                     .nest_service(
                         "/thumbnails",
-                        ServeDir::new("/workspace/summarizer/data")
-                            .fallback(ServeFile::new("/workspace/summarizer/data/notfound.jpg")),
+                        ServeDir::new("./data").fallback(ServeFile::new("./data/notfound.jpg")),
                     )
                     .with_state(pgpool),
             ),
