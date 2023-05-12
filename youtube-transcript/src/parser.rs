@@ -52,6 +52,12 @@ impl<'a> HTMLParser<'a> for String {
     }
 }
 
+impl<'a> HTMLParser<'a> for str {
+    fn html_string(&'a self) -> &'a str {
+        self
+    }
+}
+
 /// Struct that contains data about transcirpt text along with start and duration in the whole video.
 #[derive(PartialEq, Debug, Serialize)]
 pub struct TranscriptCore {

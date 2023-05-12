@@ -6,6 +6,8 @@ pub(crate) struct Remoteurl {
     pub id: i32,
     pub created_at: NaiveDateTime,
     pub link: String,
+    pub image_id: String,
+    pub title: String,
 }
 
 #[derive(FromRow)]
@@ -27,4 +29,6 @@ pub(crate) struct Summary {
     pub created_at: NaiveDateTime,
     pub content: String,
     pub link: String,
+    pub image_id: Option<String>,
+    pub title: Option<String>,
 }

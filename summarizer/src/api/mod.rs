@@ -1,7 +1,11 @@
 mod v1;
-use axum::{routing::get, Router};
+use axum::{
+    routing::{get, post},
+    Router,
+};
 use sqlx::postgres::PgPool;
-use v1::summary::summaries;
+use tower_http::services::{ServeDir, ServeFile};
+use v1::{summaries, summarize};
 pub fn get_router(pgpool: PgPool) -> Router {
     Router::new()
         .route("/", get(|| async { "Summarizer" }))
@@ -10,7 +14,12 @@ pub fn get_router(pgpool: PgPool) -> Router {
             Router::new().nest(
                 "/v1",
                 Router::new()
+                    .route("/summarize", post(summarize))
                     .route("/summaries", get(summaries))
+                    .nest_service(
+                        "/thumbnails",
+                        ServeDir::new("./data").fallback(ServeFile::new("./data/notfound.jpg")),
+                    )
                     .with_state(pgpool),
             ),
         )

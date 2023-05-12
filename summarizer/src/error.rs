@@ -2,13 +2,14 @@ use anyhow::Error as anyhowError;
 use async_openai::error::OpenAIError;
 use axum::extract::Json;
 use axum_core::response::IntoResponse;
+use regex::Error as regexError;
+use reqwest::Error as reqError;
 use serde::Serialize;
 use serde_json::Error as serde_jsonError;
 use sqlx::Error as Sqlxerror;
 use std::env::VarError;
 use std::io::Error as Ioerror;
 use std::{error::Error, fmt::Display};
-
 #[derive(Debug, Serialize)]
 pub enum Serror {
     Youtubefetch(String),
@@ -18,6 +19,7 @@ pub enum Serror {
     Other(String),
     OpenAIError(String),
     Tokenize(String),
+    Communication(String),
 }
 
 impl IntoResponse for Serror {
@@ -36,6 +38,7 @@ impl Display for Serror {
             Self::Other(x) => write!(f, "Other: {}", x),
             Self::OpenAIError(x) => write!(f, "Openai: {}", x),
             Self::Tokenize(x) => writeln!(f, "Tokenize: {}", x),
+            Self::Communication(x) => writeln!(f, "Request: {}", x),
         }
     }
 }
@@ -74,6 +77,18 @@ impl From<OpenAIError> for Serror {
 
 impl From<serde_jsonError> for Serror {
     fn from(value: serde_jsonError) -> Self {
+        Self::Other(value.to_string())
+    }
+}
+
+impl From<reqError> for Serror {
+    fn from(value: reqError) -> Self {
+        Self::Communication(value.to_string())
+    }
+}
+
+impl From<regexError> for Serror {
+    fn from(value: regexError) -> Self {
         Self::Other(value.to_string())
     }
 }

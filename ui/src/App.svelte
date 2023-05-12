@@ -1,11 +1,19 @@
 <script lang="ts">
-  import type { Podcasts } from "./model/input";
+  import type { api_response } from "./parser";
+  import { parse_api_array } from "./parser";
   import { Card as CardModel } from "./model/card";
   import Card from "./lib/card.svelte";
-  import podcast_data from "../sample.json";
-  let data = podcast_data as Podcasts;
-  let cards = data.podcasts.map((x) => {
-    return CardModel.from(x);
+  import { SUMMARIZER_URL } from "./default";
+  import { onMount } from "svelte";
+  let cards: Array<CardModel> = [];
+  onMount(async () => {
+    let podcast_data = await (
+      await fetch(`${SUMMARIZER_URL}/summaries`)
+    ).json();
+    let data = parse_api_array(podcast_data as Array<api_response>);
+    cards = data.podcasts.map((x) => {
+      return CardModel.from(x);
+    });
   });
 </script>
 
