@@ -13,8 +13,10 @@ impl<'a> Postgresmethods<'a> {
 
 impl<'a> Postgresmethods<'a> {
     pub(crate) async fn get_summaries(&self) -> Result<Vec<Summary>, Error> {
-        let query = "SELECT ts.created_at, ts.content, remoteurl.link FROM transcriptsummary ts 
-        JOIN transcript ON ts.transcript_id=transcript.id
+        let query =
+            "SELECT ts.created_at, ts.content, remoteurl.link,remoteurl.image_id,remoteurl.title 
+        FROM transcriptsummary ts 
+        JOIN transcript ON ts.transcript_id=transcript.id 
         JOIN remoteurl ON transcript.remote_id=remoteurl.id";
         sqlx::query_as::<_, Summary>(query)
             .fetch_all(self.client)

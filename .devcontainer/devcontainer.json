@@ -47,7 +47,8 @@
 				"mhutchie.git-graph",
 				"eamodio.gitlens",
 				"cweijan.vscode-database-client2",
-				"svelte.svelte-vscode"
+				"svelte.svelte-vscode",
+				"rangav.vscode-thunder-client"
 			]
 		}
 	},

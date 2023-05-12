@@ -29,4 +29,6 @@ pub(crate) struct Summary {
     pub created_at: NaiveDateTime,
     pub content: String,
     pub link: String,
+    pub image_id: Option<String>,
+    pub title: Option<String>,
 }

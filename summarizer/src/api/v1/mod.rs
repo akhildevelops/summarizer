@@ -1,3 +1,3 @@
 mod summary;
 
-pub(crate) use summary::summaries;
+pub(crate) use summary::{summaries, summarize};
