@@ -33,7 +33,7 @@
 		"ghcr.io/devcontainers-contrib/features/bash-command"
 	],
 	// Chowning is a workaround.
-	"postAttachCommand": "cat .env | xargs -n 1 echo export $1 >> ~/.bashrc && sudo chown -R vscode:rustlang /usr/local/cargo",
+	"postAttachCommand": "echo -e \"if [ -f \\\".env\\\" ];\\nthen\\n    export \\$(cat .env | xargs)\\nfi\" >> ~/.bashrc && sudo chown -R vscode:rustlang /usr/local/cargo",
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
