@@ -1,8 +1,12 @@
 <script lang="ts">
+    import { onMount } from "svelte";
     import { Card } from "../model/card";
     export let cards: Array<Card> = [];
     let pop_card: Card;
     let visible: boolean = false;
+    $: if (visible) {
+        console.log(document.getElementsByClassName("pop-box")[0]);
+    }
 </script>
 
 <div class="cards">
@@ -49,30 +53,30 @@
 <style>
     .cards {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
     }
+
     .card {
         border: 0.1em solid white;
-        margin: 2em;
-        /* width: 20em; */
+        margin: 2em auto;
+        width: 50%;
     }
 
     .card > img {
-        /* width: 20em; */
-        height: 20em;
+        max-width: 100%;
         cursor: pointer;
     }
     .pop-box {
-        left: 50%;
-        transform: translate(-50%, 0);
         position: fixed;
         border: 0.1em solid white;
         background-color: black;
         text-align: justify;
+        right: 2em;
+        left: 2em;
+        overflow-y: auto;
+        height: 20em;
     }
     .pop-box > .text {
-        position: relative;
-        top: 1em;
         padding: 2em;
     }
     .pop-box > .header {
@@ -84,8 +88,15 @@
         display: inline;
     }
     .pop-box > .header > .cross {
-        /* position: fixed; */
-        transform: translate(100%, 0);
         cursor: pointer;
+    }
+    @media only screen and (min-width: 768px) {
+        .cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+        .pop-box {
+            height: auto;
+        }
     }
 </style>
