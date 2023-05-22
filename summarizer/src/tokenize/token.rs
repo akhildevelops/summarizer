@@ -29,8 +29,8 @@ impl<'a> MultiTokens<'a> {
         Ok(whole_str)
     }
 
-    pub fn detokenize_inarray(&self) -> Result<Vec<String>, Serror> {
-        let mapper = self.tokens.iter().map(|x| self.tokenizer.decode(x.clone()));
+    pub fn detokenize_inarray(self) -> Result<Vec<String>, Serror> {
+        let mapper = self.tokens.into_iter().map(|x| self.tokenizer.decode(x));
         let mut contents: Vec<String> = vec![];
         for each_string in mapper {
             let content = each_string?;
@@ -67,7 +67,7 @@ pub trait Tokenizer {
         }
         Ok(MultiTokens {
             tokenizer: self.bpe(),
-            tokens: tokens,
+            tokens,
             max_tokens: Self::MAX_N_TOKENS,
         })
     }
