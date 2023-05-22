@@ -19,14 +19,8 @@ pub struct MultiTokens<'a> {
 }
 
 impl<'a> MultiTokens<'a> {
-    pub fn detokenize(&self) -> Result<String, Serror> {
-        let mapper = self.tokens.iter().map(|x| self.tokenizer.decode(x.clone()));
-        let mut whole_str: String = "".to_string();
-        for each_string in mapper {
-            let content = each_string?;
-            whole_str += &content
-        }
-        Ok(whole_str)
+    pub fn detokenize(self) -> Result<String, Serror> {
+        Ok(self.detokenize_inarray()?.into_iter().collect())
     }
 
     pub fn detokenize_inarray(self) -> Result<Vec<String>, Serror> {
