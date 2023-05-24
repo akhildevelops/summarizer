@@ -73,9 +73,16 @@ mod test {
     use super::*;
     use tiktoken_rs::{cl100k_base, CoreBPE};
     struct DummToken(CoreBPE);
+    struct BigToken(CoreBPE);
 
     impl Tokenizer for DummToken {
         const MAX_N_TOKENS: usize = 3;
+        fn bpe(&self) -> &CoreBPE {
+            &self.0
+        }
+    }
+    impl Tokenizer for BigToken {
+        const MAX_N_TOKENS: usize = 2000;
         fn bpe(&self) -> &CoreBPE {
             &self.0
         }
@@ -198,5 +205,32 @@ mod test {
             max_tokens: 10,
         };
         assert_eq!(tokens.detokenize().unwrap(), "asdfiawifujbads");
+    }
+    #[test]
+    fn test_big_tokenize() {
+        let content = include_str!("../../tests/data/transcript-1.txt");
+        let bt = BigToken(cl100k_base().unwrap());
+        assert_eq!(
+            bt.tokenize_in_max_tokenlimit(content)
+                .unwrap()
+                .detokenize_inarray()
+                .unwrap()
+                .len(),
+            7
+        );
+    }
+    #[test]
+    #[ignore = "Run manually to see the parts of the text."]
+    fn test_big_parts() {
+        let content = include_str!("../../tests/data/transcript-1.txt");
+        let bt = BigToken(cl100k_base().unwrap());
+        for part in bt
+            .tokenize_in_max_tokenlimit(content)
+            .unwrap()
+            .detokenize_inarray()
+            .unwrap()
+        {
+            println!("{part}\n")
+        }
     }
 }

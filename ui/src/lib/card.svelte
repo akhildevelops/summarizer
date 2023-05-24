@@ -27,28 +27,28 @@
             </div>
         {/if}
     {/each}
-    {#if visible}
-        <div class="pop-box">
-            <div class="header">
-                <div class="title">
-                    {pop_card.title}
-                </div>
-                <div
-                    class="cross"
-                    on:click={() => (visible = !visible)}
-                    on:keypress={() => {
-                        console.log("Does Nothing");
-                    }}
-                >
-                    ❌
-                </div>
+</div>
+{#if visible}
+    <div class="pop-box">
+        <div class="header">
+            <div class="title">
+                {pop_card.title}
             </div>
-            <div class="text">
-                {pop_card.content}
+            <div
+                class="cross"
+                on:click={() => (visible = !visible)}
+                on:keypress={() => {
+                    console.log("Does Nothing");
+                }}
+            >
+                ❌
             </div>
         </div>
-    {/if}
-</div>
+        <div class="text">
+            {pop_card.content}
+        </div>
+    </div>
+{/if}
 
 <style>
     .cards {
@@ -67,12 +67,14 @@
         cursor: pointer;
     }
     .pop-box {
+        font-size: 1.5em;
         position: fixed;
         border: 0.1em solid white;
         background-color: black;
         text-align: justify;
-        right: 2em;
-        left: 2em;
+        top: 20%;
+        right: 10%;
+        left: 10%;
         overflow-y: auto;
         height: 20em;
     }
