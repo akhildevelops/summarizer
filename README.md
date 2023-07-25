@@ -11,5 +11,6 @@ Podcast and Youtube
 ## Cross-compilation to raspberrypi
 - Install podman or docker
 - Install cross cli - `cargo install cross --git https://github.com/cross-rs/cross`
-- Run `cross build --features=vendored-ssl --target=arm-unknown-linux-gnueabihf`
+- Run `cross build --release --features=vendored-ssl --target=arm-unknown-linux-gnueabihf`
+- Find binaries in `target/arm-unknown-linux-gnueabihf/release/`
 
