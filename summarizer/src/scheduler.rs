@@ -67,7 +67,7 @@ pub async fn setup_youtube_data_workers(postgres_url: &str) -> Result<(), Serror
     let summarizer = Summarizer::default_params()?;
     ps_client.setup().await?;
     Monitor::new()
-        .register_with_count(1, |_| {
+        .register_with_count(1, move |_| {
             WorkerBuilder::new(ps_client.clone())
                 .layer(Extension(pgpool.clone()))
                 .layer(Extension(summarizer.clone()))

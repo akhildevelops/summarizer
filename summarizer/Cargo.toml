@@ -12,11 +12,11 @@ youtube-transcript = { path = "../youtube-transcript" }
 tokio = { workspace = true, features = ["rt-multi-thread", "macros"] }
 apalis = { workspace = true, features = ["postgres", "extensions"] }
 serde = { workspace = true, features = ["derive"] }
-sqlx = { workspace = true, features = ["postgres"] }
-openssl = { version = "0.10", features = ["vendored"] }
+sqlx = { version = "^0.5", features = ["postgres"] }
+openssl = { version = "0.10", features = ["vendored"], optional = true }
 anyhow = { workspace = true }
 chrono = { workspace = true }
-tiktoken-rs = { version = "~0.4" }
+tiktoken-rs = { version = "0.5" }
 futures = { workspace = true, features = ["executor"] }
 env_logger = { workspace = true }
 log = { workspace = true }
@@ -29,3 +29,6 @@ tower-http = { workspace = true, features = ["trace", "cors"] }
 tracing = { workspace = true }
 tracing-subscriber = { workspace = true }
 axum-extra = { version = "0.7" }
+
+[features]
+vendored-ssl = ["dep:openssl"]
