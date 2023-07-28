@@ -53,7 +53,7 @@ pub trait Tokenizer {
     }
     fn tokenize_in_max_tokenlimit(&self, text: &str) -> Result<MultiTokens, Serror> {
         let encoded_text = self.bpe().encode_with_special_tokens(text);
-        let mut n_tokens = self.bpe().encode_with_special_tokens(text).len();
+        let mut n_tokens = encoded_text.len();
         let mut tokens: Vec<Vec<usize>> = vec![];
         let mut start = 0;
         loop {
