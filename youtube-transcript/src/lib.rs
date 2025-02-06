@@ -18,6 +18,6 @@ mod utils;
 mod error;
 mod parser;
 mod youtube;
-pub use config::Config;
+pub use config::{LangCode, Config};
 pub use parser::{Transcript, TranscriptCore};
 pub use youtube::{Youtube, YoutubeBuilder};

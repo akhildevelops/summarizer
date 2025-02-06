@@ -24,7 +24,7 @@ struct Captions {
 pub(crate) trait HTMLParser<'a> {
     fn html_string(&'a self) -> &'a str;
 
-    fn caption(&'a self, from: &str, to: &str) -> Result<Caption, error::Error> {
+    fn caption(&'a self, from: &str, to: &str, lang_code: &str) -> Result<Caption, error::Error> {
         let html = self.html_string();
         let start = html
             .split_once(from)
@@ -39,9 +39,11 @@ pub(crate) trait HTMLParser<'a> {
         let caption = value
             .caption_tracks
             .into_iter()
-            .filter(|x| x.lang_code == "en")
+            .filter(|x| x.lang_code == lang_code)
             .next()
-            .ok_or(error::Error::ParseError("Cannot find lang en".into()))?;
+            .ok_or(error::Error::ParseError(format!(
+                "Cannot find lang {lang_code}"
+            )))?;
         Ok(caption)
     }
 }
@@ -155,7 +157,7 @@ mod test {
     #[test]
     fn test_caption() {
         let c = Config::default();
-        let caption = HTML.caption(c.parser.from, c.parser.to).unwrap();
+        let caption = HTML.caption(c.parser.from, c.parser.to, "en").unwrap();
         assert_eq!(caption.base_url, "https://www.youtube.com/api/timedtext?v=GJLlxj_dtq8&caps=asr&xoaf=5&hl=en-GB&ip=0.0.0.0&ipbits=0&expire=1681082354&sparams=ip,ipbits,expire,v,caps,xoaf&signature=13D068D838F3B1262B96D29751914C9E75100C4C.A99B64907A100E2E5F74ACE0BA586FB82F865CE3&key=yt8&lang=en");
     }
 

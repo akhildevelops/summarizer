@@ -16,6 +16,8 @@ roxmltree = { workspace = true }
 reqwest = { workspace = true }
 clap = { workspace = true }
 once_cell = { workspace = true }
+strum = { workspace = true }
+strum_macros = { workspace = true }
 
 [lib]
 doctest = false

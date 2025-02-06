@@ -1,9 +1,11 @@
+use std::str::FromStr;
+
 use clap::{
     builder::{self, IntoResettable},
     Arg, Command,
 };
 use serde_json;
-use youtube_transcript::YoutubeBuilder;
+use youtube_transcript::{LangCode, YoutubeBuilder};
 
 #[derive(Clone)]
 enum Format {
@@ -43,6 +45,10 @@ fn format_parser(arg: &str) -> Result<Format, String> {
     arg.try_into()
 }
 
+fn format_lang_code(arg: &str) -> Result<LangCode, String> {
+    LangCode::from_str(arg).map_err(|err| format!("{err:?}"))
+}
+
 #[tokio::main]
 async fn main() {
     let app = Command::new("yts")
@@ -53,6 +59,13 @@ async fn main() {
                 .value_parser(builder::ValueParser::new(format_parser))
                 .default_value(Format::Text),
         )
+        .arg(
+            Arg::new("lang_code")
+                .help("language code")
+                .long("lang-code")
+                .value_parser(builder::ValueParser::new(format_lang_code))
+                .default_value(<&'static str>::from(LangCode::default())),
+        )
         .arg(Arg::new("link").help("Youtube-link"))
         .get_matches();
     let format = app.get_one::<Format>("format").unwrap_or(&Format::Json);
@@ -60,6 +73,11 @@ async fn main() {
         .get_one::<String>("link")
         .expect("Youtube Link not provided");
     let transcript = YoutubeBuilder::default()
+        .lang_code(
+            app.get_one::<LangCode>("lang_code")
+                .copied()
+                .unwrap_or(LangCode::default()),
+        )
         .build()
         .transcript(link)
         .await

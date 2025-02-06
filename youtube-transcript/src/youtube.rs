@@ -1,15 +1,16 @@
-use crate::config::{Config, CONFIG_VAL};
+use crate::config::Config;
 use crate::parser::{HTMLParser, Transcript, TranscriptParser};
+use crate::LangCode;
 use reqwest::Client;
 use roxmltree::Document;
 use std::error::Error;
 
 /// Youtube container that holds the [`Config`].
-pub struct Youtube<'b> {
-    config: &'b Config,
+pub struct Youtube {
+    config: Config,
 }
 
-impl<'b> Youtube<'b> {
+impl Youtube {
     /// extracts [`Transcript`] from the video link provided.
     pub async fn transcript<'a>(&self, url: &'a str) -> Result<Transcript, Box<dyn Error>> {
         let client = Client::default();
@@ -20,7 +21,11 @@ impl<'b> Youtube<'b> {
     /// extracts [`Transcript`] from the youtube raw html text provided.
     pub async fn transcript_from_text(&self, text: &str) -> Result<Transcript, Box<dyn Error>> {
         let client = Client::default();
-        let c = text.caption(self.config.parser.from, self.config.parser.to)?;
+        let c = text.caption(
+            self.config.parser.from,
+            self.config.parser.to,
+            self.config.lang_code.into(),
+        )?;
         let response = client.get(c.base_url).send().await?;
         let trans_resp = response.text().await?;
         let doc = Document::parse(&trans_resp)?;
@@ -30,20 +35,26 @@ impl<'b> Youtube<'b> {
 }
 
 /// Builder struct for building [`Youtube`]
-pub struct YoutubeBuilder<'b> {
-    config: &'b Config,
+pub struct YoutubeBuilder {
+    config: Config,
 }
 
-impl<'b> YoutubeBuilder<'b> {
+impl YoutubeBuilder {
     /// creates [`YoutubeBuilder`] with default [`Config`] values.
     pub fn default() -> Self {
         Self {
-            config: &CONFIG_VAL,
+            config: Config::default(),
         }
     }
 
+    /// set language code
+    pub fn lang_code(mut self, lang_code: LangCode) -> Self {
+        self.config.lang_code = lang_code;
+        self
+    }
+
     /// Builds [`Youtube`]
-    pub fn build(&'b self) -> Youtube<'b> {
+    pub fn build(self) -> Youtube {
         Youtube {
             config: self.config,
         }

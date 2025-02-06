@@ -1,6 +1,8 @@
 use std::{error::Error as StdError, fmt::Display};
+
 #[derive(Debug)]
 pub enum Error {
+    #[allow(dead_code)]
     ParseError(String),
 }
 
